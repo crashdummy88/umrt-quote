@@ -22,12 +22,26 @@
     <p class="eyebrow">Soft quote</p>
     <h1>Get a number</h1>
     <div class="card"><h2>Fastest path</h2><p>Prefer Text <a href="sms:+16166065277">(616) 606-5277</a> with city/ZIP, rig type, and what’s failing.</p></div>
-    <div class="card"><h2>Known flats</h2><p>Winterize <strong>$175</strong> · Trip-prep <strong>$225</strong> (separate). Labor 1 hr min / 30-min increments. Trip fee truth on live Book.</p></div>
+    <div class="card"><h2>Known flats</h2><p>Winterize <strong id="js-winterize">$175</strong> · Trip-prep <strong id="js-tripprep">$225</strong> (separate). Labor <span id="js-labor">1 hr min / 30-min increments</span>. Trip fee truth on live Book.</p></div>
     <div class="card"><h2>Or book</h2><p><a href="https://unitedmobilerv.com/book-service/">Book service</a> on the live site.</p></div>
 
     <p><a class="btn" href="sms:+16166065277">Prefer Text (616) 606-5277</a>
        <a class="btn btn-ghost" href="https://unitedmobilerv.com/book-service/">Book service</a></p>
     <p class="fine">Starlink installs only — never “Certified”. Soft hub · Domain HOLD.</p>
   </main>
+<script>
+fetch('https://united-mobile-rv.pages.dev/api/status')
+  .then(function(r){ return r.json(); })
+  .then(function(d){
+    if (!d.success) return;
+    var byKey = {};
+    (d.pricing || []).forEach(function(p){ byKey[p.key] = p; });
+    var el;
+    if ((el = document.getElementById('js-winterize')) && byKey.winterize) el.textContent = byKey.winterize.amount;
+    if ((el = document.getElementById('js-tripprep')) && byKey.trip_prep) el.textContent = byKey.trip_prep.amount;
+    if ((el = document.getElementById('js-labor')) && byKey.labor) el.textContent = byKey.labor.amount + ' — ' + byKey.labor.note;
+  })
+  .catch(function(){});
+</script>
 </body>
 </html>
